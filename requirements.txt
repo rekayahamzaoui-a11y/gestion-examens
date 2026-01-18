@@ -2,3 +2,5 @@ streamlit
 psycopg2-binary
 plotly
 pandas
+numpy
+python-dotenv
