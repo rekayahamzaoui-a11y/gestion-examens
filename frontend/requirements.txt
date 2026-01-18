@@ -1,0 +1,13 @@
+streamlit==1.32.0
+psycopg2-binary==2.9.9
+pandas==2.2.0
+matplotlib==3.8.0
+seaborn==0.13.0
+plotly==5.18.0
+ortools==9.8.3296
+
+
+
+### **2. Créer `.gitignore`**
+
+
