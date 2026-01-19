@@ -36,11 +36,12 @@ from dashboards import (
 )
 from db_utils import test_connection, get_connection
 import traceback
+st.set_page_config(page_title="Gestion des Examens", page_icon="📚", layout="wide")
 st.set_option('client.showErrorDetails', True)
 
 from auth import init_session_state, login_page, logout, require_auth, get_current_user
 
-st.set_page_config(page_title="Gestion des Examens", page_icon="📚", layout="wide")
+#st.set_page_config(page_title="Gestion des Examens", page_icon="📚", layout="wide")
 # ==========================================
 # CONFIGURATION
 # ==========================================
