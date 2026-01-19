@@ -1,6 +1,9 @@
+from datetime import time
+
 import psycopg2
 import streamlit as st
-
+from psycopg2 import Error
+from psycopg2 import OperationalError
 
 def get_connection(retry=3):
     """Connexion à PostgreSQL avec retry automatique"""
