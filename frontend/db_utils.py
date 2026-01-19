@@ -1,9 +1,9 @@
-from datetime import time
-
-import psycopg2
+# frontend/db_utils.py
 import streamlit as st
+import psycopg2
 from psycopg2 import Error
-from psycopg2 import OperationalError
+import time
+
 
 def get_connection(retry=3):
     """Connexion à PostgreSQL avec retry automatique"""
@@ -33,16 +33,14 @@ def get_connection(retry=3):
                     port="5432"
                 )
             return conn
-        except OperationalError as e:
+        except Exception as e:
             if attempt < retry - 1:
-                time.sleep(1)  # Attendre 1 seconde avant de réessayer
+                time.sleep(1)
                 continue
             else:
-                st.error(f"❌ Impossible de se connecter à la base de données après {retry} tentatives")
+                st.error(f"❌ Impossible de se connecter à la base après {retry} tentatives: {e}")
                 return None
-        except Error as e:
-            st.error(f"❌ Erreur de connexion PostgreSQL: {e}")
-            return None
+
 
 def test_connection():
     """Test de connexion"""
@@ -61,31 +59,13 @@ def test_connection():
     return False
 
 
-def test_connection():
-    """
-    Teste la connexion à la base de données
-    """
-    conn = get_connection()
-    if conn:
-        try:
-            cur = conn.cursor()
-            cur.execute("SELECT 1;")
-            cur.close()
-            conn.close()
-            return True
-        except Exception as e:
-            st.error(f"❌ Erreur lors du test: {e}")
-            return False
-    return False
-
-
 def execute_query(query, params=None, fetch=False):
     """
-    Exécute une requête SQL
+    Exécute une requête SQL avec gestion d'erreur
 
     Args:
         query: Requête SQL
-        params: Paramètres de la requête
+        params: Paramètres de la requête (tuple)
         fetch: True pour SELECT, False pour INSERT/UPDATE/DELETE
 
     Returns:
@@ -117,5 +97,6 @@ def execute_query(query, params=None, fetch=False):
     except Exception as e:
         st.error(f"❌ Erreur SQL: {e}")
         if conn:
+            conn.rollback()
             conn.close()
         return None if fetch else False
